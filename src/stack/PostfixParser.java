@@ -1,4 +1,4 @@
-package stack;
+package lab_08;
 
 public class PostfixParser {
     private static IntStack stack;
