@@ -1,80 +1,92 @@
 package stack;
 
 public class InfixToPostfix {
-    private static Stack stack;
-    private static String output;
+    private static CharStack stack;
+    private static StringBuilder output;
+    private static StringBuilder number;
 
     public static String translate(String infix) {
-        output = "";
-        stack = new Stack(infix.length());
-        for (int i = 0; i < infix.length(); i++) { //scanning from left to right
-            char ch = infix.charAt(i);
-            switch (ch) {
-                case '+':
-                case '-':
-                    gotOperator(ch, 1);
-                    break;
-                case '*':
-                case '/':
-                    gotOperator(ch, 2);
-                    break;
-                case '^':
-                    gotOperator(ch, 3);
-                    break;
-                case '(':
-                    stack.push((int)ch); //if the symbol is a left bracket, push.
-                    break;
-                case ')':
-                    gotParenthesis(); /* if the symbol is a right bracket, pop all operators and append them in
-                    output, till a left bracket is found */
-                    break;
-                case ' ': //Clearing whitespaces.
-                    break;
-                default:
-                    output = output + ch; //if the symbol is an operand, then append and display.
-                    break;
+        infix = infix.replace(" ", "");
+        int len = infix.length();
+        number = new StringBuilder(); //for multi-digit numbers
+        output = new StringBuilder();
+        stack = new CharStack(len);
+        for (int i = 0; i < len; i++) {
+            char current = infix.charAt(i);
+            if (Character.isDigit(current)) {
+                number.append(current); /*if current char is a digit append in number to wait and see if the next number is also a number. In that case, append it too. */
+            } else if (Character.isLetter(current)) {
+                flushNumber(); //appends the accumulated number in output.
+                output.append(current).append(" "); //append the letter/variable in output.
+            } else { // if anything other than letters or digit is found.
+                flushNumber(); //appends the accumulated number in output.
+                switch (current) { //handling any other characters that may show up.
+                    case '(': // in case of left bracket, push.
+                        stack.push(current);
+                        break;
+                    case ')': //in case of right bracket, pop and append in output till left bracket is found.
+                        gotRightParentheses(current);
+                        break;
+                    default: // operator handling.
+                        gotOperator(current);
+                        break;
+                }
             }
         }
-
-        while (!stack.isEmpty()) {
-            output += (char) stack.pop(); //after scanning, pop all symbols from the stack and append them.
+        flushNumber(); //appends the accumulated number in output.
+        while (!stack.isEmpty()) { //after scanning, pop and append everything.
+            output.append(stack.pop()).append(" ");
         }
-
-        return output;
+        return output.toString().trim(); /*trim to remove trailing whitespaces. toString to convert StringBuilder to String. */
     }
 
-    private static void gotOperator(char operator, int precedence) {
+    private static void gotRightParentheses(char current) {
         while (!stack.isEmpty()) {
-            char prevOperator = (char) stack.peek(); //peeking the top value of stack to compare precedence.
-            if (prevOperator == '(') {
-                break;
-            }
-            int prevPrecedence;
-            if (prevOperator == '+' || prevOperator == '-') {
-                prevPrecedence = 1;
-            } else if (prevOperator == '*' || prevOperator == '/') {
-                prevPrecedence = 2;
-            } else { // for exponents
-                prevPrecedence = 3;
-            }
-
-            if (prevPrecedence < precedence) { /*if the precedence of the previous element is lesser, leave it as is and push the current operator in.*/
-                break;
-            } else { //precedence of previous element greater or equal, so pop and append in output.
-                output += stack.pop();
-            }
-        }
-        stack.push((int)operator); //after precedence is completely compared, push the current operator.
-    }
-
-    private static void gotParenthesis() { //handles right parentheses.
-        while (!stack.isEmpty()) {
-            char ch = (char) stack.pop();
-            if (ch == '(') { /* pop all operators and append them in output, till a left bracket is found */
+            char previousOperator = stack.pop();
+            if (previousOperator == '(') {
                 break;
             } else {
-                output += ch;
+                output.append(previousOperator).append(" ");
             }
+        }
+    }
+
+    private static void gotOperator(char currentOperator) {
+        int currentPrec = getPrecedence(currentOperator);
+        while (!stack.isEmpty()) {
+            char prevOperator = stack.peek();
+            int prevPrec = getPrecedence(prevOperator);
+            if (prevPrec >= currentPrec) {
+                output.append(stack.pop()).append(" ");
+            } else {
+                break;
+            }
+        }
+        stack.push(currentOperator);
+    }
+
+    private static int getPrecedence(char ch) {
+        int precedence = 0;
+        switch (ch) {
+            case '+':
+            case '-':
+                precedence = 1;
+                break;
+            case '*':
+            case '/':
+                precedence = 2;
+                break;
+            case '^':
+                precedence = 3;
+                break;
+        }
+        return precedence;
+    }
+
+    private static void flushNumber() {
+        if (!number.isEmpty()) {
+            output.append(number).append(" ");
+            number = new StringBuilder();
         }
     }
 }
