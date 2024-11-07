@@ -2,17 +2,17 @@ package stack;
 
 import java.util.Arrays;
 
-public class Stack {
+public class IntStack {
     final public int size;
     private int top;
     private int[] stack;
 
-    public Stack(int size) {
+    public IntStack(int size) {
         this.size = size;
         stack = new int[size];
         top = -1;
     }
-    public Stack(int[] arr) {
+    public IntStack(int[] arr) {
         stack = arr;
         size = arr.length;
         top = size - 1;
