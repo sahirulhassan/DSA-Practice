@@ -17,26 +17,26 @@ public class LinearQueue {
     }
 
     public void enqueue(int element) {
-        if (!isFull()) {
-            queue[++rear] = element;
-        } else {
+        if (isFull()) {
             throw new FullStackException();
+        } else {
+            queue[++rear] = element;
         }
     }
 
     public int dequeue() {
-        if (!isEmpty()) {
-            return queue[front++];
+        if (isEmpty()) {
+            throw new EmptyQueueException();
         } else {
-            throw new EmptyStackException();
+            return queue[front++];
         }
     }
 
     public int peek() {
-        if (!isEmpty()) {
-            return queue[front];
+        if (isEmpty()) {
+            throw new EmptyQueueException();
         } else {
-            throw new EmptyStackException();
+            return queue[front];
         }
     }
 
