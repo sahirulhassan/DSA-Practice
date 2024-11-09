@@ -1,8 +1,6 @@
 package queue;
 
-import stack.FullStackException;
 import java.util.Arrays;
-import java.util.EmptyStackException;
 
 public class LinearQueue {
     final public int size;
@@ -18,7 +16,7 @@ public class LinearQueue {
 
     public void enqueue(int element) {
         if (isFull()) {
-            throw new FullStackException();
+            throw new FullQueueException();
         } else {
             queue[++rear] = element;
         }
