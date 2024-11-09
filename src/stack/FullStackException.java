@@ -1,7 +1,7 @@
 package stack;
 
-public class FullStackException extends RuntimeException {
-    public FullStackException() {
+class FullStackException extends RuntimeException {
+    FullStackException() {
         super("Error: Stack is full.");
     }
 }

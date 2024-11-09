@@ -1,7 +1,7 @@
 package queue;
 
-public class FullQueueException extends RuntimeException {
-    public FullQueueException() {
+class FullQueueException extends RuntimeException {
+    FullQueueException() {
         super("Error: Queue is full.");
     }
 }

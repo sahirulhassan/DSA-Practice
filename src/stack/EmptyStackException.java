@@ -1,7 +1,7 @@
 package stack;
 
-public class EmptyStackException extends RuntimeException {
-    public EmptyStackException() {
+class EmptyStackException extends RuntimeException {
+    EmptyStackException() {
         super("Error: Stack is empty");
     }
 }
