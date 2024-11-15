@@ -10,7 +10,7 @@ public class LinearQueue {
     public LinearQueue(int size) {
         this.size = size;
         queue = new int[size];
-        rear = -1;
+        rear = 0;
         front = 0;
     }
 
@@ -18,7 +18,7 @@ public class LinearQueue {
         if (isFull()) {
             throw new FullQueueException();
         } else {
-            queue[++rear] = element;
+            queue[rear++] = element;
         }
     }
 
@@ -26,7 +26,11 @@ public class LinearQueue {
         if (isEmpty()) {
             throw new EmptyQueueException();
         } else {
-            return queue[front++];
+            int popped = queue[front++];
+            if (isEmpty()) {
+                front = rear = 0;
+            }
+            return popped;
         }
     }
 
@@ -39,18 +43,18 @@ public class LinearQueue {
     }
 
     public boolean isEmpty() {
-        return front > rear;
+        return front == rear;
     }
 
     public boolean isFull() {
-        return rear == size - 1;
+        return rear == size;
     }
 
     public void print() {
         if (isEmpty()) {
             System.out.println("Queue is empty");
         } else {
-            System.out.println("Queue elements: " + Arrays.toString(Arrays.copyOfRange(queue, front, rear + 1)));
+            System.out.println("Queue elements: " + Arrays.toString(Arrays.copyOfRange(queue, front, rear)));
         }
     }
 }
