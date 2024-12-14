@@ -31,8 +31,7 @@ public class DoublyLinkedNode {
         return next;
     }
 
-    public void setNext(DoublyLinkedNode next) {
-        this.next = next;
+    public void setNext(DoublyLinkedNode next) {this.next = next;
     }
 
     @Override

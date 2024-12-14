@@ -2,9 +2,13 @@ package linked_list;
 
 public class DoublyLinkedList {
     private DoublyLinkedNode head;
+    private DoublyLinkedNode tail;
+    private int size;
 
     public DoublyLinkedList() {
         head = null;
+        tail = null;
+        size = 0;
     }
 
     public DoublyLinkedNode getHead() {
@@ -19,26 +23,33 @@ public class DoublyLinkedList {
         DoublyLinkedNode newNode = new DoublyLinkedNode(data);
         if (isEmpty()) {
             head = newNode;
+            tail = newNode;
         } else {
-            DoublyLinkedNode current = head;
-            while (current.getNext() != null) {
-                current = current.getNext();
-            }
-            current.setNext(newNode);
-            newNode.setPrev(current);
+            tail.setNext(newNode);
+            newNode.setPrev(tail);
+            tail = newNode;
         }
+        size++;
     }
 
     public void prepend(int data) {
         DoublyLinkedNode newNode = new DoublyLinkedNode(data);
-        newNode.setNext(head);
-        head.setPrev(newNode);
-        head = newNode;
+        if (isEmpty()) {
+            head = newNode;
+            tail = newNode;
+        } else {
+            newNode.setNext(head);
+            head.setPrev(newNode);
+            head = newNode;
+        }
+        size++;
     }
 
     public void insert(int pos, int data) {
-        if (pos < 0) {
+        if (pos < 0 || pos > size) {
             throw new IllegalArgumentException("Enter a valid position to insert a value.");
+        } else if (pos == size) {
+            append(data);
         } else if (pos == 0) {
             prepend(data);
         } else {
@@ -47,14 +58,13 @@ public class DoublyLinkedList {
             for (int i = 0; i < pos - 1; i++) {
                 current = current.getNext();
             }
-
-            if (current == null) {
-                throw new IllegalArgumentException("Position is out of bounds.");
-            }
-
             newNode.setNext(current.getNext());
             newNode.setPrev(current);
             current.setNext(newNode);
+            if (newNode.getNext() != null) {
+                newNode.getNext().setPrev(newNode);
+            }
+            size++;
         }
     }
 
@@ -75,52 +85,120 @@ public class DoublyLinkedList {
             current.setNext(current.getNext().getNext());
             if (current.getNext() != null) {
                 current.getNext().setPrev(current);
+            } else {
+                tail = current;
             }
+            size--;
         }
     }
 
-    public void deleteHead() {
+    public int deleteHead() {
         if (isEmpty()) {
             throw new IllegalArgumentException("List is empty.");
         }
+        int popped = head.getData();
         head = head.getNext();
-        head.setPrev(null);
+        if (head != null) {
+            head.setPrev(null);
+        } else {
+            tail = null;
+        }
+        size--;
+        return popped;
     }
 
-    public void deleteTail() {
+    public int deleteTail() {
         if (isEmpty()) {
             throw new IllegalArgumentException("List is empty.");
         }
-        DoublyLinkedNode current = head;
-        while (current.getNext().getNext() != null) {
-            current = current.getNext();
+        int popped = tail.getData();
+        if (head == tail) {
+            head = null;
+            tail = null;
+        } else {
+            tail = tail.getPrev();
+            tail.setNext(null);
         }
-        current.setNext(null);
+        size--;
+        return popped;
     }
 
-    public void delete(int pos) {
+    public int delete(int pos) {
         if (isEmpty()) {
             throw new IllegalArgumentException("List is empty.");
         }
-        if (pos < 0) {
+        if (pos < 0 || pos >= size) {
             throw new IllegalArgumentException("Enter a valid position to delete a value.");
         } else if (pos == 0) {
-            deleteHead();
+            return deleteHead();
+        } else if (pos == size - 1) {
+            return deleteTail();
         } else {
             DoublyLinkedNode current = head;
             for (int i = 0; i < pos - 1; i++) {
                 current = current.getNext();
             }
 
-            if (current == null) {
-                throw new IllegalArgumentException("Position is out of bounds.");
-            }
-
+            int popped = current.getNext().getData();
             current.setNext(current.getNext().getNext());
             if (current.getNext() != null) {
                 current.getNext().setPrev(current);
             }
+            size--;
+            return popped;
         }
+    }
+
+    public void swap(int i, int j) {
+        if (i < 0 || j < 0 || i >= size || j >= size) {
+            throw new IllegalArgumentException("Enter valid positions to swap values.");
+        }
+        if (i == j) {
+            return;
+        }
+        DoublyLinkedNode node1 = head;
+        DoublyLinkedNode node2 = head;
+        for (int k = 0; k < i; k++) {
+            node1 = node1.getNext();
+        }
+        for (int k = 0; k < j; k++) {
+            node2 = node2.getNext();
+        }
+        int temp = node1.getData();
+        node1.setData(node2.getData());
+        node2.setData(temp);
+    }
+
+    public int get(int pos) {
+        if (pos < 0 || pos >= size) {
+            throw new IllegalArgumentException("Enter a valid position to get a value.");
+        }
+        DoublyLinkedNode current = head;
+        for (int i = 0; i < pos; i++) {
+            current = current.getNext();
+        }
+        return current.getData();
+    }
+
+    public void set(int pos, int data) {
+        if (pos < 0 || pos >= size) {
+            throw new IllegalArgumentException("Enter a valid position to set a value.");
+        }
+        DoublyLinkedNode current = head;
+        for (int i = 0; i < pos; i++) {
+            current = current.getNext();
+        }
+        current.setData(data);
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void clear() {
+        head = null;
+        tail = null;
+        size = 0;
     }
 
     public boolean isEmpty() {
