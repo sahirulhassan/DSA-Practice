@@ -1,6 +1,7 @@
-package queue;
+package queue.deque;
 
-import java.util.Arrays;
+import queue.EmptyQueueException;
+import queue.FullQueueException;
 
 class CircularDeque2 {
     int deque[];

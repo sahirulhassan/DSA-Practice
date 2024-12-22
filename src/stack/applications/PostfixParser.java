@@ -1,4 +1,6 @@
-package stack;
+package stack.applications;
+
+import stack.IntStack;
 
 public class PostfixParser {
     private static IntStack stack;

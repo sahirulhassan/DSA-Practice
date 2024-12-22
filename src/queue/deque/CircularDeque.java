@@ -1,4 +1,7 @@
-package queue;
+package queue.deque;
+
+import queue.EmptyQueueException;
+import queue.FullQueueException;
 
 public class CircularDeque {
     private final int[] deque;

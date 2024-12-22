@@ -1,6 +1,6 @@
 package stack;
 
-import linked_list.SinglyLinkedList;
+import linked_list.singly.SinglyLinkedList;
 
 public class IntStack_viaLinkedList {
     private final SinglyLinkedList stack;

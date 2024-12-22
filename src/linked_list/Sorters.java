@@ -1,5 +1,8 @@
 package linked_list;
 
+import linked_list.doubly.DoublyLinkedList;
+import linked_list.doubly.DoublyLinkedNode;
+
 public class Sorters {
     DoublyLinkedList originalList;
     int len, swaps, comparisons;

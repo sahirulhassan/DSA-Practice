@@ -1,4 +1,7 @@
-package queue;
+package queue.circular;
+
+import queue.EmptyQueueException;
+import queue.FullQueueException;
 
 import java.util.Arrays;
 

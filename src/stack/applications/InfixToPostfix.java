@@ -1,4 +1,6 @@
-package stack;
+package stack.applications;
+
+import stack.CharStack;
 
 public class InfixToPostfix {
     private static CharStack stack;

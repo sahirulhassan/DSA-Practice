@@ -1,7 +1,7 @@
 package queue;
 
-class EmptyQueueException extends RuntimeException {
-    EmptyQueueException() {
+public class EmptyQueueException extends RuntimeException {
+    public EmptyQueueException() {
         super("Error: Queue is empty");
     }
 }

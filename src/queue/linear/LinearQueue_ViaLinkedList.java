@@ -1,6 +1,6 @@
-package queue;
+package queue.linear;
 
-import linked_list.SinglyLinkedList;
+import linked_list.singly.SinglyLinkedList;
 
 public class LinearQueue_ViaLinkedList {
     private final SinglyLinkedList queue;

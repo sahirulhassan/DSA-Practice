@@ -1,4 +1,4 @@
-package linked_list;
+package linked_list.doubly;
 
 public class DoublyLinkedList {
     private DoublyLinkedNode head;
